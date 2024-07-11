@@ -9,8 +9,6 @@ yarn.lock
 
 # Ignore environment-specific files
 next-env.d.ts
-next.config.js
-tsconfig.json
 
 # Ignore any local development environment files
 # Example files:
