@@ -1,0 +1,7 @@
+{
+"install": "Install",
+"upgrade": "Upgrade",
+"snapshot": "Snapshot",
+"state-sync": "State Sync",
+"public-rpc": "Public RPC"
+}

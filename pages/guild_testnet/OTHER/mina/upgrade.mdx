@@ -1,0 +1,170 @@
+import { Callout } from "nextra-theme-docs";
+import { Tabs, Steps, Cards, Card } from "nextra/components";
+
+![Logo Celestia](/assets/node/mina-wordmark-light.svg)
+
+# Update Version
+
+## Berkeley Testnet Release 2.0.0rampup6 (ITN RC2)
+
+<Steps>
+  ### Step 1
+```bash copy filename="Remove existing Mina sources"
+sudo rm /etc/apt/sources.list.d/mina*.list
+```
+
+### Step 2 
+```bash copy filename="Add and update the Mina package sources"
+echo "deb [trusted=yes] http://packages.o1test.net/ focal rampup" | sudo tee /etc/apt/sources.list.d/mina-rampup.list
+sudo apt-get update
+```
+
+### Step 3
+```bash copy filename="Install the Mina Daemon package with the specified version"
+sudo apt-get install -y mina-berkeley=2.0.0rampup8-56fa1db
+```
+
+### Step 4  
+
+```bash copy filename="Start Mina Daemon"
+sudo systemctl start mina
+```
+
+### Check and Done
+
+```bash copy filename="Check Mina Status"
+mina client status
+```
+
+</Steps>
+
+<Callout emoji="📢">
+  Expected Output: [Mina 2.0.0rampup6 Release](https://github.com/MinaProtocol/mina/releases/tag/2.0.0rampup6)
+</Callout>
+
+   ```
+   Git SHA-1: 4061884b18137c1182c7fcfa80f52804008a2509
+   Chain ID: 332c8cc05ba8de9efc23a011f57015d8c9ec96fac81d5d3f7a06969faf4bce92
+   ```
+
+## Berkeley Testnet Release 2.0.0rampup7 (ITN RC3)
+
+<Steps>
+  ### Step 1
+```bash copy filename="Remove existing Mina sources"
+sudo rm /etc/apt/sources.list.d/mina*.list
+```
+
+### Step 2 
+```bash copy filename="Add and update the Mina package sources"
+echo "deb [trusted=yes] http://packages.o1test.net/ focal rampup" | sudo tee /etc/apt/sources.list.d/mina-rampup.list
+sudo apt-get update
+```
+
+### Step 3
+```bash copy filename="Install the Mina Daemon package with the specified version"
+sudo apt-get install -y mina-berkeley=2.0.0rampup7-4a0fff9
+```
+
+### Step 4
+
+```bash copy filename="Start Mina Daemon"
+sudo systemctl start mina
+```
+
+### Check and Done
+
+```bash copy filename="Check Mina Status"
+mina client status
+```
+
+</Steps>
+
+<Callout emoji="📢">
+  Expected Output: [Mina 2.0.0rampup7 Release](https://github.com/MinaProtocol/mina/releases/tag/2.0.0rampup7)
+</Callout>
+
+   ```
+   Git SHA-1: 4a0fff9a2966d14b7a1c0ec00785cea9096b5341
+   Chain ID: 332c8cc05ba8de9efc23a011f57015d8c9ec96fac81d5d3f7a06969faf4bce92
+   ```
+
+## Berkeley Testnet Release 2.0.0rampup8 (ITN RC4)
+
+<Steps>
+  ### Step 1
+```bash copy filename="Remove existing Mina sources"
+sudo rm /etc/apt/sources.list.d/mina*.list
+```
+
+### Step 2 
+```bash copy filename="Add and update the Mina package sources"
+echo "deb [trusted=yes] http://packages.o1test.net/ focal rampup" | sudo tee /etc/apt/sources.list.d/mina-rampup.list
+sudo apt-get update
+```
+
+### Step 3
+```bash copy filename="Install the Mina Daemon package with the specified version"
+sudo apt-get install -y mina-berkeley=2.0.0rampup8-56fa1db
+```
+
+### Step 4 
+
+```bash copy filename="Start Mina Daemon"
+sudo systemctl start mina
+```
+
+### Check and Done
+
+```bash copy filename="Check Mina Status"
+mina client status
+```
+
+</Steps>
+
+<Callout emoji="📢">
+  Expected Output: [Mina 2.0.0rampup8 Release](https://github.com/MinaProtocol/mina/releases/tag/2.0.0rampup8)
+</Callout>
+
+   ```
+   Git SHA-1: 56fa1dbcc36aa638c84cdc624adc407075a088a2
+   Chain ID: 332c8cc05ba8de9efc23a011f57015d8c9ec96fac81d5d3f7a06969faf4bce92
+   ```
+
+
+## Exploring Logs for Testworld Mission 2.0 (Testnet Finished)
+
+In this tutorial, we will walk you through the process of exporting and sharing logs for Testworld Mission 2.0 on Mina Protocol Testnet. Follow the steps below to share your logs.
+
+<Steps>
+### Step 1: Export Logs
+
+Use the following command to export logs from the Mina client:
+
+```bash copy filename="Export Logs"
+mina client export-logs
+```
+
+This command will generate log files within the `~/.mina-config/exported_logs` directory.
+
+### Step 2: Upload Logs to Transfer.sh
+
+After exporting the logs, you can share them easily by uploading to Transfer.sh. Use the following command, replacing `#FILE-NAME` with the name of the log file you want to share:
+
+```bash copy filename="Upload Logs"
+sudo curl --upload-file ~/.mina-config/exported_logs/#FILE-NAME.tar.gz https://transfer.sh/#FILE-NAME.tar.gz
+```
+
+This command will provide you with an output similar to this:
+
+```bash filename="Output"
+https://transfer.sh/#RANDOM/#FILE-NAME.tar.gzroot@VPS-NAME
+```
+
+</Steps>
+
+<Callout type="info" emoji="ℹ️">
+  Example Log URL: [https://transfer.sh/EsOtS7DUU7/2024-01-20_11-53-41.tar.gz](https://transfer.sh/EsOtS7DUU7/2024-01-20_11-53-41.tar.gz)
+</Callout>
+
+By following these steps, you can efficiently export and share your Mina Protocol Testnet logs. 

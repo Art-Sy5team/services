@@ -1,0 +1,6 @@
+{
+  "EVM": "EVM Testnet",
+  "cosmos": "Cosmos Testnet",
+  "polkadot": "Polkadot Testnet",
+  "OTHER": "Other Network"
+}

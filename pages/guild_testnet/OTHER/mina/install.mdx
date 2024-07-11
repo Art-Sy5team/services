@@ -1,0 +1,157 @@
+import { Callout } from "nextra-theme-docs";
+import { Tabs, Steps, Cards, Card } from "nextra/components";
+
+## Mina on Ubuntu 20
+
+This document provides step-by-step instructions for installing and running the Mina network on the Ubuntu 20 operating system.
+
+
+<Steps>
+### Install
+
+Firstly, add and update the Mina package sources:
+
+```js copy filename="Remove existing Mina sources"
+sudo rm /etc/apt/sources.list.d/mina*.list
+echo "deb [trusted=yes] http://packages.o1test.net/ focal rampup" | sudo tee /etc/apt/sources.list.d/mina-rampup.list
+sudo apt-get update
+```
+
+Next, install Mina:
+
+```js copy filename="Install Mina Daemon"
+sudo apt-get install -y mina-berkeley=2.0.0rampup5-55b7818
+```
+
+### Configure Keys and Files
+
+1. Download and extract the zip file received via email.
+
+2. Create a key directory on your server:
+
+   ```js copy filename="Create key directory"
+   mkdir ~/keys
+   ```
+
+3. Set permissions for that directory:
+
+   ```js copy filename="Set permissions"
+   chmod 700 ~/keys
+   ```
+
+4. Edit the `my-wallet` file using the Nano editor:
+
+   ```js copy filename="Edit"
+   nano ~/keys/my-wallet
+   ```
+
+   - Copy the KEY from the `community-216-key` file (open with a text editor on your computer) and paste it into this file. Save the changes by pressing `Ctrl + X`, then select `Y`, and press `Enter`.
+
+5. Set permissions for the `my-wallet` file:
+
+   ```js copy filename="Set permissions"
+   chmod 600 ~/keys/my-wallet
+   ```
+
+6. Edit the `my-wallet.pub` file using Nano:
+
+   ```js copy filename="Edit my-wallet file"
+   nano ~/keys/my-wallet.pub
+   ```
+
+   - Copy all content from the `community-216.pub` file (open with a text editor on your computer) and paste it. Save the changes `Ctrl + X`, then select `Y`, and press `Enter`.
+
+### Running Mina (Manually)
+
+Note: Find the new wallet password in the `community-216-password.txt` file. Use this password to replace `MINA_PRIVKEY_PASS="şifre"` below. Press `Ctrl + X`, then select `Y`, and press `Enter` to save the changes.
+**Note: It's better to match all passwords***
+
+1. Generate libp2p key pair:
+
+   ```js copy filename="Generate"
+   mina libp2p generate-keypair -privkey-path /root/keys/keys
+   ```
+
+2. Edit the `~/.mina-env` file using the Nano editor:
+
+   ```js copy filename="Edit"
+   nano ~/.mina-env
+   ```
+
+   - Replace `ipniziyazınız` with your server's IP address.
+
+   - Copy and paste the following code into the file:
+
+   ```js copy filename="Edit & Set"
+   MINA_PRIVKEY_PASS="şifre"
+   UPTIME_PRIVKEY_PASS="şifre"
+   EXTRA_FLAGS="--log-json --log-snark-work-gossip true --internal-tracing --insecure-rest-server --log-level Debug --file-log-level Debug --config-directory /root/.mina-config/ --external-ip ipniziyazınız --itn-keys  f1F38+W3zLcc45fGZcAf9gsZ7o9Rh3ckqZQw6yOJiS4=,6GmWmMYv5oPwQd2xr6YArmU1YXYCAxQAxKH7aYnBdrk=,ZJDkF9EZlhcAU1jyvP3m9GbkhfYa0yPV+UdAqSamr1Q=,NW2Vis7S5G1B9g2l9cKh3shy9qkI1lvhid38763vZDU=,Cg/8l+JleVH8yNwXkoLawbfLHD93Do4KbttyBS7m9hQ= --itn-graphql-port 3089 --uptime-submitter-key  /root/keys/my-wallet --uptime-url https://block-producers-uptime-itn.minaprotocol.tools/v1/submit --metrics-port 10001 --enable-peer-exchange  true --libp2p-keypair /root/keys/keys --log-precomputed-blocks true --max-connections 200 --peer-list-url  https://storage.googleapis.com/seed-lists/testworld-2-0_seeds.txt --generate-genesis-proof  true --block-producer-key /root/keys/my-wallet --node-status-url https://nodestats-itn.minaprotocol.tools/submit/stats  --node-error-url https://nodestats-itn.minaprotocol.tools/submit/stats  --file-log-rotations 500"
+   RAYON_NUM_THREADS=6
+   MINA_LIBP2P_PASS="şifre"
+   ```
+
+   - Press `Ctrl + C`, then type `:qa` and press `Enter
+
+`. Then type `:exit` and press `Enter` to exit the Nano editor.
+
+3. Create and edit the `mina.service` file:
+
+   ```js copy filename="Creat & Edit"
+   vi /usr/lib/systemd/user/mina.service
+   ```
+
+   - Paste the following code into the file:
+
+   ```js copy filename="Enter this Code"
+   [Unit]
+   Description=Mina Daemon Service
+   After=network.target
+   StartLimitIntervalSec=60
+   StartLimitBurst=3
+
+   [Service]
+   Environment="PEERS_LIST_URL=https://storage.googleapis.com/seed-lists/berkeley_seeds.txt"
+   Environment="LOG_LEVEL=Info"
+   Environment="FILE_LOG_LEVEL=Debug"
+   EnvironmentFile=%h/.mina-env
+   Type=simple
+   Restart=always
+   RestartSec=30
+   ExecStart=/usr/local/bin/mina daemon \
+     $EXTRA_FLAGS
+   ExecStop=/usr/local/bin/mina client stop-daemon
+
+   [Install]
+   WantedBy=default.target
+   ```
+
+4. Set permissions for the `.mina-env` file:
+
+   ```js copy filename="Set permissions"
+   chmod 600 ~/.mina-env
+   ```
+
+5. Reload and start the systemd service:
+
+   ```js copy filename="Reload and start"
+   systemctl --user daemon-reload
+   systemctl --user restart mina
+   systemctl --user enable mina
+   sudo loginctl enable-linger
+   ```
+
+6. Monitor the Mina log output with the following command:
+
+   ```js copy filename="Mina log output"
+   journalctl --user-unit mina -n 1000 -f
+   ```
+
+Wait for a moment, and ultimately the following command will give output:
+
+```js copy filename="output"
+mina client status
+```
+
+</Steps>
+
+Now, your Mina should be running successfully. Congratulations!

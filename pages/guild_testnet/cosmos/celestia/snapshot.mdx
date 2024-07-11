@@ -1,0 +1,56 @@
+import { Callout } from "nextra-theme-docs";
+import { Tabs, Steps, Cards, Card } from "nextra/components";
+
+![Logo Celestia](/assets/node/Celestia-logo-color-color.svg)
+
+
+# Snapshot
+
+Snapshots allows a new node to join the network by recovering application state from a backup file. Snapshot contains compressed copy of chain data directory. To keep backup files as small as plausible, snapshot server is periodically beeing state-synced.
+
+## Snapshot Information
+
+<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <thead>
+      <tr>
+        <th style={{ textAlign: 'left', border: '1px solid black', padding: '8px' }}>HEIGHT</th>
+        <th style={{ textAlign: 'left', border: '1px solid black', padding: '8px' }}>DATE</th>
+        <th style={{ textAlign: 'left', border: '1px solid black', padding: '8px' }}>SIZE</th>
+        <th style={{ textAlign: 'left', border: '1px solid black', padding: '8px' }}>CHAIN ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style={{ textAlign: 'left', border: '1px solid black', padding: '8px' }}></td>
+        <td style={{ textAlign: 'left', border: '1px solid black', padding: '8px' }}></td>
+        <td style={{ textAlign: 'left', border: '1px solid black', padding: '8px' }}></td>
+        <td style={{ textAlign: 'left', border: '1px solid black', padding: '8px' }}></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<Callout type="info" emoji="ℹ️">
+  Snapshots are taken automatically every 6 hours starting at 05:00 UTC
+</Callout>
+
+<Steps>
+  ### Stop the service and reset data
+```js copy filename="Backup your 'priv_validator_state.json'"
+sudo systemctl stop celestia.service
+cp $HOME/.celestia-app/data/priv_validator_state.json $HOME/.celestia-app/priv_validator_state.json.backup
+rm -rf $HOME/.celestia-app/data
+```
+
+### Download snapshot
+```js copy filename="Download the latest snapshot"
+curl -L https://snapshots.kjnodes.com/celestia-testnet/snapshot_latest.tar.lz4 | tar -Ilz4 -xf - -C $HOME/.celestia-app
+mv $HOME/.celestia-app/priv_validator_state.json.backup $HOME/.celestia-app/data/priv_validator_state.json
+```
+### Restart the service and check log
+```js copy filename="backup and check log"
+sudo systemctl start celestia.service && sudo journalctl -u celestia.service -f --no-hostname -o cat
+```
+</Steps>
+

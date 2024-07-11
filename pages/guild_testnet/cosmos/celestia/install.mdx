@@ -1,0 +1,207 @@
+import { Callout } from "nextra-theme-docs";
+import { Tabs, Steps, Cards, Card } from "nextra/components";
+
+![Logo Celestia](/assets/node/Celestia-logo-color-color.svg)
+
+# Manual Installation
+
+- **Setup validator name**
+
+```js copy filename="Replace YOUR_MONIKER_GOES_HERE with your validator name"
+MONIKER="YOUR_MONIKER_GOES_HERE"
+```
+
+
+<Steps>
+  ### Install dependencies
+```js copy filename="Update system package and install build tools"
+sudo apt -q update
+sudo apt -qy install curl git jq lz4 build-essential fail2ban ufw
+sudo apt -qy upgrade
+```
+  
+
+### Install Go
+```js copy filename="version 1.21.6"
+sudo rm -rf /usr/local/go
+curl -Ls https://go.dev/dl/go1.21.6.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local
+eval $(echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee /etc/profile.d/golang.sh)
+eval $(echo 'export PATH=$PATH:$HOME/go/bin' | tee -a $HOME/.profile)
+```
+
+### Download and build binaries
+```js copy filename="Clone project repository"
+cd $HOME
+rm -rf celestia-app
+git clone https://github.com/celestiaorg/celestia-app.git
+cd celestia-app
+git checkout v1.3.0
+```
+
+```js copy filename="Build binaries"
+make build
+```
+
+```js copy filename="Prepare binaries for Cosmovisor"
+mkdir -p $HOME/.celestia-app/cosmovisor/genesis/bin
+mv build/celestia-appd $HOME/.celestia-app/cosmovisor/genesis/bin/
+rm -rf build
+```
+
+```js copy filename="Create application symlinks"
+sudo ln -s $HOME/.celestia-app/cosmovisor/genesis $HOME/.celestia-app/cosmovisor/current -f
+sudo ln -s $HOME/.celestia-app/cosmovisor/current/bin/celestia-appd /usr/local/bin/celestia-appd -f
+```
+
+### Install Cosmovisor and create a service
+
+```js copy filename="Download and install Cosmovisor"
+go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.5.0
+
+```
+
+```js copy filename="Create service"
+[Service]
+User=$USER
+ExecStart=$(which cosmovisor) run start
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=65535
+Environment="DAEMON_HOME=$HOME/.celestia-app"
+Environment="DAEMON_NAME=celestia-appd"
+Environment="UNSAFE_SKIP_BACKUP=true"
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$HOME/.celestia-app/cosmovisor/current/bin"
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+```js copy filename="Enable Service"
+sudo systemctl daemon-reload
+sudo systemctl enable celestia.service
+```
+
+### Initialize Node
+
+```js copy filename="Set node configuration"
+celestia-appd config chain-id mocha-4
+celestia-appd config keyring-backend test
+celestia-appd config node tcp://localhost:12057
+```
+
+```js copy filename="Initialize node"
+celestia-appd init $MONIKER --chain-id mocha-4
+```
+
+```js copy filename="Download genesis and addrbook"
+curl -Ls https://snapshots.kjnodes.com/celestia-testnet/genesis.json > $HOME/.celestia-app/config/genesis.json
+curl -Ls https://snapshots.kjnodes.com/celestia-testnet/addrbook.json > $HOME/.celestia-app/config/addrbook.json
+```
+
+```js copy filename="Add seeds"
+sed -i -e "s|^seeds *=.*|seeds = \"3f472746f46493309650e5a033076689996c8881@celestia-testnet.rpc.kjnodes.com:12059\"|" $HOME/.celestia-app/config/config.toml
+```
+
+```js copy filename="Set commit timeout"
+sed -i -e "s|^target_height_duration *=.*|timeout_commit = \"11s\"|" $HOME/.celestia-app/config/config.toml
+```
+
+```js copy filename="Set minimum gas price"
+sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0.002utia\"|" $HOME/.celestia-app/config/app.toml
+```
+
+```js copy filename="Set pruning"
+sed -i \
+  -e 's|^pruning *=.*|pruning = "nothing"|' \
+  $HOME/.celestia-app/config/app.toml
+```
+
+```js copy filename="Set custom ports"
+sed -i -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:12058\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:12057\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:12060\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:12056\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":12066\"%" $HOME/.celestia-app/config/config.toml
+sed -i -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:12017\"%; s%^address = \":8080\"%address = \":12080\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:12090\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:12091\"%; s%:8545%:12045%; s%:8546%:12046%; s%:6065%:12065%" $HOME/.celestia-app/config/app.toml
+```
+
+### Download latest chain snapshot
+
+```js copy filename="Download Snapshots"
+curl -L https://snapshots.kjnodes.com/celestia-testnet/snapshot_latest.tar.lz4 | tar -Ilz4 -xf - -C $HOME/.celestia-app
+[[ -f $HOME/.celestia-app/data/upgrade-info.json ]] && cp $HOME/.celestia-app/data/upgrade-info.json $HOME/.celestia-app/cosmovisor/genesis/upgrade-info.json
+```
+
+### Start service and check logs
+```js copy filename="start dan check logs"
+sudo systemctl start celestia.service && sudo journalctl -u celestia.service -f --no-hostname -o cat
+```
+
+</Steps>
+
+
+## Set up validator
+
+<Steps>
+  ### Create or import wallet
+  First of all we will need to create wallet for our validator. You have two options for that.
+- OPTION 1 - CREATE NEW WALLET
+```js copy filename="Generate Wallet"
+celestia-appd keys add wallet
+```
+- OPTION 2 - RECOVER EXISTING WALLET
+```js copy filename="Recover Wallet"
+celestia-appd keys add wallet --recover
+```
+ 
+<Callout type="error" emoji="️❗">
+  Save the mnemonic output as this is the only way to recover your validator wallet in case you lose it!
+</Callout>
+
+- To list your wallets, use the command below
+```js copy filename="List wallets"
+celestia-appd keys list
+```
+
+### Fund a wallet
+To create validator you have to fund the previously created wallet via [Discord](https://discord.com/invite/celestiacommunity) by sending this message to the **#mocha-faucet channel**:
+
+```js copy filename="cmd bot"
+$request celestia1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+- To check wallet balance use command below
+```js copy filename="Query wallet balances"
+celestia-appd q bank balances $(celestia-appd keys show wallet -a)
+```
+
+### Create validator
+<Callout type="info" emoji="ℹ️">
+  Please make sure you have adjusted moniker, identity, details, website to match your values.
+</Callout>
+
+```js copy filename="Create validator"
+celestia-appd tx staking create-validator \
+--amount 1000000utia \
+--pubkey $(celestia-appd tendermint show-validator) \
+--moniker "YOUR_MONIKER_NAME" \
+--identity "YOUR_KEYBASE_ID" \
+--details "YOUR_DETAILS" \
+--website "YOUR_WEBSITE_URL" \
+--chain-id mocha-4 \
+--commission-rate 0.05 \
+--commission-max-rate 0.20 \
+--commission-max-change-rate 0.01 \
+--min-self-delegation 1 \
+--from wallet \
+--gas-adjustment 1.4 \
+--gas auto \
+--gas-prices 0.005utia \
+-y
+```
+<Callout emoji="📢">
+  Save the ~/.celestia-app/config/priv_validator_key.json file as this is the only way to recover your validator signing key in case you lose it!
+</Callout>
+
+</Steps>
+
+
+
+

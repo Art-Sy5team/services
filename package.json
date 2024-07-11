@@ -1,0 +1,24 @@
+{
+  "name": "frame-docs",
+  "version": "0.0.1",
+  "description": "Frame Docs",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "Pedro",
+  "license": "MIT",
+  "dependencies": {
+    "@mdx-js/loader": "^3.0.0",
+    "next": "^14.1.0",
+    "nextra": "^2.13.2",
+    "nextra-theme-docs": "^2.13.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,31 @@
+import { Callout } from "nextra-theme-docs";
+import { Tabs, Steps, Cards, Card } from "nextra/components";
+
+![Logo Celestia](/assets/node/Celestia-logo-color-color.svg)
+
+Since we are using Cosmovisor, it makes it very easy to prepare for upcomming upgrade. You just have to build new binaries and move it into cosmovisor upgrades directory.
+
+# Upgrade
+
+<Steps>
+  ### Download latest binaries
+```js copy filename="Clone project repository"
+cd $HOME
+rm -rf gaia
+git clone https://github.com/cosmos/gaia.git
+cd gaia
+git checkout v14.1.0
+```
+
+```js copy filename="Build binaries"
+make build
+```
+### Prepare Cosmovisor
+```js copy filename="Prepare binaries for Cosmoviso"
+mkdir -p $HOME/.gaia/cosmovisor/upgrades/v14/bin
+mv build/gaiad $HOME/.gaia/cosmovisor/upgrades/v14/bin/
+rm -rf build
+```
+
+</Steps>
+

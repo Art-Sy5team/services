@@ -1,0 +1,54 @@
+import { Callout } from "nextra-theme-docs";
+import { Tabs, Steps, Cards, Card } from "nextra/components";
+
+![Logo Celestia](/assets/node/mina-wordmark-light.svg)
+
+# Mina Protocol Testworld Mission 2.0
+
+<Tabs items={['Chain Information', 'Explorer', 'Specifications']} defaultIndex={0}>
+  <Tabs.Tab>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      | **Network**   | **Latest Version** | **Status**  |
+      | -------------- | ------------       |  ---------- |
+      | Testworld      |        2.0.0rampup8      |  Offline    |
+    </div>
+    
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+      <Cards>
+        <Card title="Website" href="https://minaprotocol.com/" />
+        <Card title="Discord" href="https://discord.com/invite/minaprotocol" />
+        <Card title="Twitter" href="https://twitter.com/minaprotocol" />
+        <Card title="Github" href="https://github.com/MinaProtocol" />
+        <Card title="Explorer" href="https://minascan.io/testworld/home" />
+        <Card title="Bot Proposal" href="#" />
+      </Cards>
+
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      ## Minimum Specifications
+      | Component | Minimum Requirements               |
+      |-----------|----------------------              |
+      |CPU        |8 cores                             |
+      |RAM        |16 GB                               |
+      |Storage    |10 GB of free storage               |
+      |Connection |1 Mbps internet connection          |
+    </div>
+  </Tabs.Tab>
+</Tabs>
+
+## Public Endpoints
+
+### Berkeley
+
+```js copy filename="Berkeley GraphQL"
+https://api.minascan.io/node/berkeley/v1/graphql
+```
+
+```js copy filename="Berkeley Archive GraphQL API"
+https://api.minascan.io/archive/berkeley/v1/graphql
+```
+

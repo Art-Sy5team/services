@@ -1,0 +1,65 @@
+import { Callout } from "nextra-theme-docs";
+import { Tabs, Steps, Cards, Card } from "nextra/components";
+
+![Logo Celestia](https://v1.cosmos.network/img/cosmos-wordmark-black.fc56b576.svg)
+
+Celestia is a minimal blockchain that focuses on ordering and publishing transactions without executing them. By separating consensus and application execution layers, Celestia modularizes the blockchain technology stack, opening up new possibilities for decentralized application builders.
+
+<Tabs items={['Chain Information', 'Chain Explorer']} defaultIndex={0}>
+  <Tabs.Tab>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      | **Chain ID**   | **Latest Version** | **Status**  |
+      | -------------- | ------------       |  ---------- |
+      | provider       |       v14.1.0      |  Offline    |
+    </div>
+  </Tabs.Tab>
+
+ <Tabs.Tab>
+ <Cards>
+  <Card title="Website" href="https://hub.cosmos.network/" />
+  <Card title="Discord" href="https://discord.com/invite/cosmosnetwork" />
+  <Card title="Twitter" href="https://twitter.com/cosmoshub" />
+  <Card title="Doc Official" href="https://tutorials.cosmos.network/" />
+  <Card title="Explorer" href="https://test.artstake.net" />
+  <Card title="Bot Proposal" href="#" />
+</Cards>
+  </Tabs.Tab>
+</Tabs>
+
+## Public Endpoints
+
+```js copy filename="API endpoints"
+https://cosmoshub-testnet.api.artstake.net
+```
+
+```js copy filename="RPC endpoints"
+https://cosmoshub-testnet.rpc.artstake.net
+```
+
+```js copy filename="gRPC ssl/tls"
+cosmoshub-testnet.grpc.artstake.net:443
+```
+
+## Peering Service
+
+```js copy filename="State-Sync"
+d5519e378247dfb61dfe90652d1fe3e2b3005a5b@cosmoshub-testnet.rpc.kjnodes.com:13456
+```
+
+```js copy filename="seed-node"
+3f472746f46493309650e5a033076689996c8881@cosmoshub-testnet.rpc.kjnodes.com:13459
+```
+
+- **Address Book Configuration**
+
+Download  Celestia testnet address book configuration:
+```js copy filename="Live addrbook"
+curl -Ls https://snapshots.kjnodes.com/cosmoshub-testnet/addrbook.json > $HOME/.gaia/config/addrbook.json
+```
+
+- **Live Peers**
+
+```js copy filename="peers"
+peers="a46ce2df33f8de333d0dd127238cb9603110b92a@43.131.37.70:26656,c2ef8a0e7408d0a8dc8a546e4d5c17a42977639e@23.111.23.233:36656,86c9f2f5f252eee2b64cf0aec8059c86c88b8824@65.21.84.109:26656,b5a96e3a723c41315cc13ad47cc74a9eacf9c2d1@65.21.8.221:26656,b5e7986d77f417590b942b3ff7b3cab6efa8a7f6@54.37.31.127:14956,d5519e378247dfb61dfe90652d1fe3e2b3005a5b@65.109.68.190:13456,f2a22743888813ed3b5cfe131f5a23a5bb67902f@178.18.241.50:15656,2cc8f3959005a58593e3fa811a715e83c3c05e70@51.195.5.204:26656,32cf2bf82e58bfffb515898e8e7e108f582e7c1e@116.202.53.245:14956,cd1cd8d95132857ae14825428e55eaffea36a597@195.14.6.2:26656,e281bdf052dad68ccf40777cb7d25649a5b9fa26@207.180.219.160:36656,cec023875375891c32e92d2c239027451eb5d4c3@165.22.185.17:26656,538d7bbc8ee2d5c6cd8bd12da935759cef006e5e@5.161.94.187:26656,4ea6e56300a2f37b90e58de5ee27d1c9065cf871@104.245.147.213:26656,08ec17e86dac67b9da70deb20177655495a55407@104.245.147.196:26656,c299ee06a11addcccb4cbd0d600ca521ff143ff1@65.109.25.113:14956,00a824ce894d823f59814812dd4e295892629667@46.4.5.45:14956,46385dd9979a4e9499d43954325a38a62d985001@135.181.59.182:26656,6483d2098cab9402c7931dc07181f42fbe3cc05f@148.251.177.108:14956,f5772050cc2cab7dab946f2deb5e45ae1ea71dcc@148.251.133.248:30056"
+sed -i -e "s|^persistent_peers *=.*|persistent_peers = \"$peers\"|" $HOME/.gaia/config/config.toml
+```

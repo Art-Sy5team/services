@@ -1,0 +1,65 @@
+import { Callout } from "nextra-theme-docs";
+import { Tabs, Steps, Cards, Card } from "nextra/components";
+
+![Logo Celestia](/assets/node/Celestia-logo-color-color.svg)
+
+Celestia is a minimal blockchain that focuses on ordering and publishing transactions without executing them. By separating consensus and application execution layers, Celestia modularizes the blockchain technology stack, opening up new possibilities for decentralized application builders.
+
+<Tabs items={['Chain Information', 'Chain Explorer']} defaultIndex={0}>
+  <Tabs.Tab>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      | **Chain ID**   | **Latest Version** | **Status**  |
+      | -------------- | ------------       |  ---------- |
+      | mocha-4        |        v1.3.0      |  Offline    |
+    </div>
+  </Tabs.Tab>
+
+ <Tabs.Tab>
+ <Cards>
+  <Card title="Website" href="https://celestia.org/" />
+  <Card title="Discord" href="https://discord.celestia.org/" />
+  <Card title="Twitter" href="https://twitter.com/CelestiaOrg" />
+  <Card title="Doc Official" href="https://twitter.com/CelestiaOrg" />
+  <Card title="Explorer" href="https://test.artstake.net/celestia" />
+  <Card title="Bot Proposal" href="https://test.artstake.net/celestia" />
+</Cards>
+  </Tabs.Tab>
+</Tabs>
+
+## Public Endpoints
+
+```js copy filename="API endpoints"
+https://celestia-testnet.api.artstake.net
+```
+
+```js copy filename="RPC endpoints"
+https://celestia-testnet.rpc.artstake.net
+```
+
+```js copy filename="gRPC ssl/tls"
+celestia-testnet.grpc.artstake.net:443
+```
+
+## Peering Service
+
+```js copy filename="State-Sync"
+d5519e378247dfb61dfe90652d1fe3e2b3005a5b@celestia-testnet.rpc.kjnodes.com:12056
+```
+
+```js copy filename="seed-node"
+3f472746f46493309650e5a033076689996c8881@celestia-testnet.rpc.kjnodes.com:12059
+```
+
+- **Address Book Configuration**
+
+Download  Celestia testnet address book configuration:
+```js copy filename="Live addrbook"
+curl -Ls https://snapshots.kjnodes.com/celestia-testnet/addrbook.json > $HOME/.celestia-app/config/addrbook.json
+```
+
+- **Live Peers**
+
+```js copy filename="peers"
+peers="116fe3189ed13800f15a4ce9ccf09ae4933b7b52@168.119.64.26:26656,8194b4f9c4d558a0a4d4242bce9274892cbfb386@20.250.38.245:26656,43e9da043318a4ea0141259c17fcb06ecff816af@141.94.73.39:43656,e726816f42831689eab9378d5d577f1d06d25716@164.152.163.148:36656,2c6b4cb9d9790a4c5d234fc5d150ffb41cdbc5db@65.21.112.220:2020,d5519e378247dfb61dfe90652d1fe3e2b3005a5b@65.109.68.190:12056,d46a5874ad57437936941a1c547800d7d5d21d38@93.115.25.18:56056,5a7566aa030f7e5e7114dc9764f944b2b1324bcd@65.109.23.114:11656,bdbb36bb9afd57400635623268e93a6ea629a3dd@141.94.138.48:26679,954b08a6a928a86f8daa28127a23d397a1c3ea2b@185.165.170.88:46656,36bcefba853da82cc0c523e7c194aafa45c0e03e@54.212.51.165:26656,65991c2231cddc0f9fb73efc36a3c1acb75b9d58@18.237.238.51:26656,6625a17beb8e41660d030b3c3abe10d5d1df02bf@5.9.10.222:26656,9b4e9d338b0412c795c41663f6cc6397d0cd7a1c@65.21.94.31:26656,9b2bfc7b3f6e310e064bde500c4f1341734b8b18@35.89.143.124:26656,e899a7b4d178b3581e90aa7c93c9105f5de274b9@63.35.146.3:26656,47751e8d6e2be2601828e9178a3f52158bf6f04f@52.12.130.18:26656,620af8640eeafeda909a1ba98fd760ab84528fb8@34.216.126.141:26656,9369d4b730e3cfe2b18d0bf12e2f73a6441c2c5a@52.14.139.29:26656,ecc42c1feee16222ce60a6267694de2186d77646@54.149.234.124:26656,7756ccdf91ebed81c3d7f4fc121aba0211b60491@5.78.46.203:26656,c387bc3418465231c9e77a3caec47d37b50aa9d9@136.243.88.91:6050,f0c7ef0af1c3557dc05509ba6dff2a22bdc705e9@65.108.238.61:13656,f9e950870eccdb40e2386896d7b6a7687a103c99@88.99.219.120:43656,85aef6d15d0197baff696b6e31c88e0f21073c59@162.55.245.144:2400,c17c0cbf05e98656fee5f60fad469fc528f6d6de@65.109.25.113:11656,5c2a752c9b1952dbed075c56c600c3a79b58c395@195.3.220.54:27206,c1adbe48a8ff3dd5bde1608d42264c82182359fe@35.240.181.64:26656,2abbf1892ce9d91acbbc55b112f3561b01fc3465@162.62.126.26:26656,6d996aeed0402ce5da57c1272eb33f7b38c183ec@43.157.38.30:26656"
+sed -i -e "s|^persistent_peers *=.*|persistent_peers = \"$peers\"|" $HOME/.celestia-app/config/config.toml
+```

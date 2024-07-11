@@ -1,0 +1,28 @@
+# Cheat Sheet
+
+Easily control your Tendermint blockchain using this handy cheat sheet of essential commands.
+
+```js copy filename="Start Mina Daemon"
+sudo systemctl start mina
+```
+
+```bash copy filename="Stop Mina Daemon"
+sudo systemctl stop mina
+```
+
+```bash copy filename="Reload Systemd Daemon"
+sudo systemctl daemon-reload
+```
+
+```bash copy filename="View Mina Logs"
+sudo journalctl -u mina -n 1000 -f
+```
+
+```bash copy filename="Check Mina Status"
+mina client status
+```
+
+```bash copy filename="Export Logs"
+mina client export-logs
+```
+
